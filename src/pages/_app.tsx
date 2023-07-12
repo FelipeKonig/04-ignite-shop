@@ -1,10 +1,11 @@
+/* eslint-disable react/no-unknown-property */
 import type { AppProps } from 'next/app'
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 
 const roboto = Roboto({
   weight: ['400', '700'],
-  subsets: ['latin']
+  subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
