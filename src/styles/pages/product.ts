@@ -62,7 +62,12 @@ export const ProductDetails = styled('div', {
     fontSize: '$md',
     fontFamily: '__Roboto_b4911f',
 
-    '&:hover': {
+    '&:disabled': {
+      opacity: 0.6,
+      cursor: 'not-allowed',
+    },
+
+    '&:not(:disabled):hover': {
       backgroundColor: '$green300',
     },
   },
