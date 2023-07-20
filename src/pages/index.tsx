@@ -1,4 +1,8 @@
-import { HomeContainer, IconContainer, Product } from '@/styles/pages/home'
+import {
+  HomeContainer,
+  IconContainer,
+  ProductContainer,
+} from '@/styles/pages/home'
 import Image from 'next/image'
 import { useKeenSlider } from 'keen-slider/react'
 import Stripe from 'stripe'
@@ -11,14 +15,19 @@ import 'keen-slider/keen-slider.min.css'
 import Head from 'next/head'
 
 import { Handbag } from 'phosphor-react'
+import { useShoppingCart } from 'use-shopping-cart'
+import { Product } from 'use-shopping-cart/core'
+
+interface ProductHome {
+  id: string
+  name: string
+  imageUrl: string
+  price: string
+  defaultPriceId: string
+}
 
 interface HomeProps {
-  products: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-  }[]
+  products: ProductHome[]
 }
 
 export default function Home({ products }: HomeProps) {
@@ -29,6 +38,23 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
+  const { addItem } = useShoppingCart()
+
+  function handleAdditem(product: ProductHome) {
+    const prod: Product = {
+      id: product.id,
+      name: product.name,
+      image: product.imageUrl,
+      currency: 'BRL',
+      price: parseFloat(
+        product.price.replace(/[^\d,.]/g, '').replace(',', '.'),
+      ),
+      price_id: product.defaultPriceId,
+    }
+
+    addItem(prod)
+  }
+
   return (
     <>
       <Head>
@@ -37,7 +63,7 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Product className="keen-slider__slide" key={product.id}>
+            <ProductContainer className="keen-slider__slide" key={product.id}>
               <Link href={`/product/${product.id}`} prefetch={false}>
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
               </Link>
@@ -47,10 +73,15 @@ export default function Home({ products }: HomeProps) {
                   <span>{product.price}</span>
                 </div>
                 <IconContainer>
-                  <Handbag size={32} color="white" weight="bold" />
+                  <Handbag
+                    size={32}
+                    color="white"
+                    weight="bold"
+                    onClick={() => handleAdditem(product)}
+                  />
                 </IconContainer>
               </footer>
-            </Product>
+            </ProductContainer>
           )
         })}
       </HomeContainer>
@@ -75,6 +106,7 @@ export const getStaticProps: GetStaticProps = async () => {
         style: 'currency',
         currency: 'BRL',
       }).format(unitAmount / 100),
+      defaultPriceId: price.id,
     }
   })
 

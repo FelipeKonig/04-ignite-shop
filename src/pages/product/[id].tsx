@@ -4,12 +4,12 @@ import {
   ProductContainer,
   ProductDetails,
 } from '@/styles/pages/product'
-import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
 import Stripe from 'stripe'
+import { useShoppingCart } from 'use-shopping-cart'
+import { Product } from 'use-shopping-cart/core'
 
 interface ProductProps {
   product: {
@@ -17,32 +17,27 @@ interface ProductProps {
     name: string
     imageUrl: string
     price: string
-    description: string
+    description?: string
     defaultPriceId: string
   }
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false)
+  const { addItem } = useShoppingCart()
 
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
-
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (err) {
-      // conectar com uma ferramenta de observabilidade (Datalog / Sentry)
-
-      setIsCreatingCheckoutSession(false)
-      alert('Falha ao redirecionar ao checkout!')
+  function handleAdditem({ product }: ProductProps) {
+    const prod: Product = {
+      id: product.id,
+      name: product.name,
+      image: product.imageUrl,
+      currency: 'BRL',
+      price: parseFloat(
+        product.price.replace(/[^\d,.]/g, '').replace(',', '.'),
+      ),
+      price_id: product.defaultPriceId,
     }
+
+    addItem(prod)
   }
 
   return (
@@ -59,11 +54,8 @@ export default function Product({ product }: ProductProps) {
           <span>{product.price}</span>
           <p>{product.description}</p>
 
-          <button
-            disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
-          >
-            Comprar agora
+          <button onClick={() => handleAdditem({ product })}>
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>

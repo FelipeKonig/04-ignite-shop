@@ -50,6 +50,10 @@ export const CartContainer = styled('main', {
     marginTop: '4rem',
     clear: 'both',
   },
+
+  p: {
+    color: '$gray300',
+  },
 })
 
 export const ItemContainer = styled('div', {

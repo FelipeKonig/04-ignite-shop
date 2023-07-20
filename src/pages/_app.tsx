@@ -8,6 +8,9 @@ import logoImg from '../assets/logo.svg'
 import { Container, Header } from '@/styles/pages/app'
 import Image from 'next/image'
 import Cart from './components/cart'
+import Link from 'next/link'
+import { CartProvider } from 'use-shopping-cart'
+import getConfig from 'next/config'
 
 const roboto = Roboto({
   weight: ['400', '700'],
@@ -22,6 +25,13 @@ export const metadata: Metadata = {
 globalStyles()
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { publicRuntimeConfig } = getConfig()
+
+  const nextUrl = publicRuntimeConfig.NEXT_URL
+  const publicKey = publicRuntimeConfig.STRIPE_PUBLIC_KEY
+  const successUrl = `${nextUrl}/success?session_id={CHECKOUT_SESSION_ID}`
+  const cancelUrl = `${nextUrl}/`
+
   return (
     <>
       <style jsx global>{`
@@ -30,13 +40,24 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <Container>
-        <Header>
-          <a href="/">
-            <Image src={logoImg} alt="" />
-          </a>
-          <Cart />
-        </Header>
-        <Component {...pageProps} />
+        <CartProvider
+          mode="payment"
+          cartMode="client-only"
+          stripe={publicKey}
+          successUrl={successUrl}
+          cancelUrl={cancelUrl}
+          currency="BRL"
+          allowedCountries={['BR']}
+          shouldPersist
+        >
+          <Header>
+            <Link href="/" prefetch={false}>
+              <Image src={logoImg} alt="" />
+            </Link>
+            <Cart />
+          </Header>
+          <Component {...pageProps} />
+        </CartProvider>
       </Container>
     </>
   )
