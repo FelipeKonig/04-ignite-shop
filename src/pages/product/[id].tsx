@@ -17,7 +17,7 @@ interface ProductProps {
     name: string
     imageUrl: string
     price: string
-    description?: string
+    description: string
     defaultPriceId: string
   }
 }

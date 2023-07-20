@@ -10,7 +10,6 @@ import Image from 'next/image'
 import Cart from './components/cart'
 import Link from 'next/link'
 import { CartProvider } from 'use-shopping-cart'
-import getConfig from 'next/config'
 
 const roboto = Roboto({
   weight: ['400', '700'],
@@ -25,13 +24,6 @@ export const metadata: Metadata = {
 globalStyles()
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { publicRuntimeConfig } = getConfig()
-
-  const nextUrl = publicRuntimeConfig.NEXT_URL
-  const publicKey = publicRuntimeConfig.STRIPE_PUBLIC_KEY
-  const successUrl = `${nextUrl}/success?session_id={CHECKOUT_SESSION_ID}`
-  const cancelUrl = `${nextUrl}/`
-
   return (
     <>
       <style jsx global>{`
@@ -43,9 +35,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <CartProvider
           mode="payment"
           cartMode="client-only"
-          stripe={publicKey}
-          successUrl={successUrl}
-          cancelUrl={cancelUrl}
+          stripe=""
+          successUrl=""
+          cancelUrl=""
           currency="BRL"
           allowedCountries={['BR']}
           shouldPersist
