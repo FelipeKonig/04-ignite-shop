@@ -36,6 +36,7 @@ export const Product = styled('div', {
     padding: '2rem',
     borderRadius: 6,
     backgroundColor: 'rgba(0,0,0, 0.6)',
+    cursor: 'initial',
 
     transform: 'translateY(110%)',
     opacity: 0,
@@ -51,6 +52,11 @@ export const Product = styled('div', {
       fontWeight: 'bold',
       color: '$green300',
     },
+
+    div: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
   },
 
   '&:hover': {
@@ -58,5 +64,20 @@ export const Product = styled('div', {
       transform: 'translateY(0%)',
       opacity: 1,
     },
+  },
+})
+
+export const IconContainer = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+
+  border: '0',
+  background: '$green500',
+  padding: '0.75rem',
+  borderRadius: 6,
+  cursor: 'pointer',
+
+  '&:hover': {
+    backgroundColor: '$green300',
   },
 })

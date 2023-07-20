@@ -7,6 +7,7 @@ import { globalStyles } from '@/styles/global'
 import logoImg from '../assets/logo.svg'
 import { Container, Header } from '@/styles/pages/app'
 import Image from 'next/image'
+import Cart from './components/cart'
 
 const roboto = Roboto({
   weight: ['400', '700'],
@@ -30,7 +31,10 @@ export default function App({ Component, pageProps }: AppProps) {
       `}</style>
       <Container>
         <Header>
-          <Image src={logoImg} alt="" />
+          <a href="/">
+            <Image src={logoImg} alt="" />
+          </a>
+          <Cart />
         </Header>
         <Component {...pageProps} />
       </Container>

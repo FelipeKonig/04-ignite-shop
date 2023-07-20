@@ -1,4 +1,4 @@
-import { HomeContainer, Product } from '@/styles/pages/home'
+import { HomeContainer, IconContainer, Product } from '@/styles/pages/home'
 import Image from 'next/image'
 import { useKeenSlider } from 'keen-slider/react'
 import Stripe from 'stripe'
@@ -9,6 +9,8 @@ import Link from 'next/link'
 
 import 'keen-slider/keen-slider.min.css'
 import Head from 'next/head'
+
+import { Handbag } from 'phosphor-react'
 
 interface HomeProps {
   products: {
@@ -35,20 +37,20 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
           return (
-            <Link
-              href={`/product/${product.id}`}
-              key={product.id}
-              prefetch={false}
-            >
-              <Product className="keen-slider__slide">
+            <Product className="keen-slider__slide" key={product.id}>
+              <Link href={`/product/${product.id}`} prefetch={false}>
                 <Image src={product.imageUrl} width={520} height={480} alt="" />
-
-                <footer>
+              </Link>
+              <footer>
+                <div>
                   <strong>{product.name}</strong>
                   <span>{product.price}</span>
-                </footer>
-              </Product>
-            </Link>
+                </div>
+                <IconContainer>
+                  <Handbag size={32} color="white" weight="bold" />
+                </IconContainer>
+              </footer>
+            </Product>
           )
         })}
       </HomeContainer>
