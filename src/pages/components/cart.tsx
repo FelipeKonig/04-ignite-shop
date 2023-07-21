@@ -78,12 +78,8 @@ export default function Cart() {
     }
   }
 
-  function handleChangeOpenCart() {
-    if (openCart) {
-      setOpenCart(false)
-    } else {
-      setOpenCart(true)
-    }
+  const handleChangeOpenCart = () => {
+    setOpenCart((openCart) => !openCart)
   }
 
   return (
